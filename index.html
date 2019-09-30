@@ -42,7 +42,7 @@
     </div>
     <div data-key="75" class="key">
       <kbd>K</kbd>
-      <br/>
+      <br />
       <span class="sound">tom</span>
     </div>
     <div data-key="76" class="key">
@@ -63,27 +63,43 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 </body>
-  <script>
-    window.addEventListener('keydown', function(event) {
-      const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`)
-      const key = document.querySelector(`.key[data-key="${event.keyCode}"]`);
-      console.log(audio);
-      if(!audio) return;
-      audio.currentTime = 0; // rewind to the start so the user can repeatly press the same key have it play the sondwave again.
-      audio.play();
-      key.classList.toggle('playing');
+<script>
 
-    })
 
-    function removeTransition(event) {
-      //console.log(event);
-      if(event.propertyName !== 'transform') return; 
-      console.log(event.propertyName);
+  function playSound(event) {
+    const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`)
+    const key = document.querySelector(`.key[data-key="${event.keyCode}"]`);
+    console.log(audio);
+    if (!audio) return;
+    audio.currentTime = 0; // rewind to the start so the user can repeatly press the same key and have it play the soundwave again.
+    audio.play();
+    key.classList.add('playing');
+  }
+ 
+
+
+
+  // function is activated when any of the audio attributes are activated
+  // a condision it run to check to see if the propertyName === transform.
+  // if it does not equal transform, it will return nothing
+  // if it does === transform, then it will remove the classlist('playing') assigned
+  // to the targeted data-key.
+  function removeTransition(event) {
+    //console.log(event);
+    if (event.propertyName !== 'transform') {
+      return;
+    } else {
+      //console.log(event.propertyName);
       this.classList.remove('playing');
     }
+  }
 
-    const keys = document.querySelectorAll('.key');
-    keys.forEach(key => key.addEventListener('transitionend', removeTransition))
+  // select all key classes and assigned it to the variable keys
+  const keys = document.querySelectorAll('.key');
+  //loop through with forEach method and watch for 'transitionend', if there, run function removeTransition
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition))
 
-  </script>
+  window.addEventListener('keydown', playSound);
+</script>
+
 </html>
